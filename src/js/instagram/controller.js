@@ -1,8 +1,8 @@
 'use strict';
 
 
-app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3','Instagram4', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog',
-	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, Instagram4, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog) {
+app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog',
+	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog) {
 	  $rootScope.what = [];
 	  $rootScope.modal = [];
 	  $rootScope.modal.yo = [];

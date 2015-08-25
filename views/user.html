@@ -65,12 +65,13 @@
 
       
 
-              <div ng-class="gridClass ? 'col-sm-4 col-sm-offset-4' : 'col-md-12'">
+              <div ng-class="gridClass ? 'col-sm-8 col-sm-offset-2' : 'col-md-12'">
                 
 
                 <div class="panel-body" id="user">
 
-                   <div ng-class="gridClass ? 'instapic instalist animate col-md-12 col-sm-12 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time')">
+                   <div ng-class="gridClass ? 'instapic animate col-md-4 col-sm-6 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"
+                   ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time')">
 
                          <a ng-click="openPlain(item.images.standard_resolution.url, item.link, item.caption.text, item.user.username, item.created_time, item.videos.standard_resolution.url, item.likes.count, item.tags, item.user.id);modalOpen(item.link)">
 

@@ -201,31 +201,3 @@ app.factory('instaMedia', ['$http',
     }
 ]);
 'use strict';
-
-app.factory('Instagram4',  ['$http',
-    function($http) {
-        var base = "https://api.instagram.com/v1";
-    //  var clientId = '1ca7d98f346549fc95641d0b04307f82';
-    
-
-        return {
-            'get': function(count, auth) {
-                    //  searchText =  encodeURIComponent(searchText);
-
-                var request = '/media/popular?';
-                var url = base + request;
-                var config = {
-                    'params': {
-                        
-                        'access_token': auth,
-                        'count': count,
-                    'callback': 'JSON_CALLBACK'
-                    }
-                };
-                return $http.jsonp(url, config);
-            }
-
-        };
-        
-    }
-]);

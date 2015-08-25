@@ -1,6 +1,7 @@
 html,body {
 		height:100%;
 		font-size:16px!important;
+     background-color: #2986E1!important;
 		font-family:'roboto condensed', sans-serif;
 		  -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -9,7 +10,6 @@ html,body {
 body {
  margin: 0;
  overflow-x: hidden;
- background-color: #2986E1!important;
 }
 article,
 aside,
