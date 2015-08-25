@@ -5,6 +5,8 @@ Uses the Instagram API to get hashtags, user feeds and media.
 
 This is my first angular app; I have no idea what I'm doing.
 
+<a href="http:/tagori.la"><strong>Tagori.la</strong></a>
+
 #Credits:
 
 Modal:  
