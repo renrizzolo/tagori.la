@@ -1,0 +1,106 @@
+   <div class="container-mast">
+
+          <div class="row" id="top">
+
+                     
+<div class="head col-md-12">
+   <a ng-href="/search/">
+  <div class="col-md-4 col-md-offset-4">
+<img ng-src="/img/tagorila_logo-1200.png"/>
+  </div>  
+     </a>
+</div>
+               <div class="col-lg-4 col-lg-offset-4">
+               <md-content layout-padding>
+ 
+<form ng-submit="location.path('/search/' + searchText);gotoElement('hashtext')" name="form" style="margin-bottom: -36px;">
+    <md-button class="md-icon-button md-primary" aria-label="search" ng-click="location.path('/search/' + searchText);gotoElement('hashtext')" style="cursor:pointer; float:right; margin-top:25px;" ng-disabled="form.text.$invalid">
+        <md-icon class="glyphicon glyphicon-search"></md-icon>
+
+      </md-button>
+
+  <md-input-container md-float>
+
+        <label>enter hashtag or filter current results</label>
+      
+
+      <input type="text" ng-model="searchText" ng-trim="false" ng-change="searchText = searchText.split(' ').join('')" name="text" ng-required="true">
+       
+       
+     
+
+
+   </md-input-container>
+   
+
+
+</form>
+
+<br>
+
+          </md-content>
+      </div>
+</div>
+</div>
+   <div class="heading text-center" id="hashtext">
+
+                        <h3 ng-if="form.text.$dirty">#{{searchText}}</h3>
+                        <h3 ng-if="!form.text.$dirty" ng-show="search">#{{search}}</h3>
+                   
+  <a class="grid" ng-show="items"  ng-click="gridClass = !gridClass">
+   <md-button class="md-icon-button"  style="height:40px;width:40px;"  aria-label="toggle grid view" >
+  <md-icon style="line-height:0.6;left:1px;top:0px;" ng-class="gridClass ? 'glyphicon glyphicon-th' : 'glyphicon glyphicon-th-large'"class="" aria-hidden="true"></md-icon>
+  </md-button>
+  </a>
+        </div>
+
+
+        <div class="row bro">
+          <h1 class="body-bkg" ng-if="!form.text.$dirty" ng-show="search" ng-hide="items">Let's search!</h1>
+          <h2 class="body-bkg" ng-if="!form.text.$dirty" ng-show="search" ng-hide="items">#</h2>
+            <div ng-class="gridClass ? 'col-sm-8 col-sm-offset-2' : 'col-md-12'">
+              
+                 
+                    <div class="panel-body" id="tag">
+                        
+                            <div class="" ng-class="gridClass ? 'instapic animate col-md-4 col-sm-6 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time') | limitTo: itemsDisplayedInList track by $index">
+                           
+                                  <a ng-click="openPlain(item.images.standard_resolution.url, item.link, item.caption.text, item.user.username, item.created_time, item.videos.standard_resolution.url, item.likes.count, item.tags, item.user.id);modalOpen(item.link)">
+                                        <img preload-image ng-src="{{ item.images.low_resolution.url }}" default-image="img/loading-bubbles.svg" fallback-image="{{item.images.thumbnail.url}}"  title="" alt="">
+                                        <span class="glyphicon glyphicon-play play" ng-show="item.videos.low_resolution.url.length>1" aria-hidden="true"></span>
+                                  </a>
+                               
+                              
+                                <a class="profile" ng-href="http://tagori.la/user/{{item.user.id}}" style="cursor:pointer;">
+                                {{item.user.username}} 
+                                    <span class="likes">
+                                        <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                                        {{item.likes.count}}
+                                    </span>
+                                </a>
+                                      
+                           
+                            </div>
+
+                            <div ng-show="error" class="error">
+     
+                            </div> 
+                               
+                    </div>
+
+                     <button class="next" ng-if="items"ng-hide="error"id="last" ng-disabled="loading" when-scrolled="loadMore()">
+                        <h3  ng-hide="noMore"> displaying {{filteredItems.length}} results. <br> 
+                        <span ng-hide="loading" class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-top:10px;color:#2986E1;"></span> 
+                        <br>
+                      <img ng-show="loading" class="loading-text" ng-src="img/loading-bubbles.svg"></h3>
+
+                        <h3 ng-show="noMore">No more results</h3>
+                     </button>
+
+            </div>
+                                  
+<div class="toTop" ng-show="items" ng-click="gotoElement('top')">
+  <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>    
+</div>
+        </div>
+      </div>
