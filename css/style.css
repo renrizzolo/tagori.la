@@ -9,7 +9,7 @@ html,body {
 body {
  margin: 0;
  overflow-x: hidden;
- background-color: #2986E1;
+ background-color: #2986E1!important;
 }
 article,
 aside,
