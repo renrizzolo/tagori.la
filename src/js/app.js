@@ -90,7 +90,7 @@ app.service('anchorSmoothScroll', function(){
 app.factory('Instagram', ['$http',
     function($http) {
         var base = "https://api.instagram.com/v1";
-        var clientId = '1ca7d98f346549fc95641d0b04307f82';
+        var clientId = 'yourclientcode';
         return {
             'get': function(count, searchText) {
                     //  searchText =  encodeURIComponent(searchText);
@@ -139,7 +139,7 @@ app.factory('Instagram3', ['$http',
             'get': function(count, userId) {
                 var base = "https://api.instagram.com/v1";
         
-                var clientId = '1ca7d98f346549fc95641d0b04307f82';
+                var clientId = 'yourclientcode';
                 var userRequest = '/users/' + userId + '/media/recent'
                 var url = base + userRequest;           
                 var config = {
@@ -161,7 +161,7 @@ app.factory('instaLink', ['$http',
             'get': function(shortLink) {
                 var base = "https://api.instagram.com/oembed?url=http://instagram.com/p/";
         
-                var clientId = '1ca7d98f346549fc95641d0b04307f82';
+                var clientId = 'yourclientcode';
                 var mediaRequest = shortLink
                 var url = base + mediaRequest;
 
@@ -184,7 +184,7 @@ app.factory('instaMedia', ['$http',
             'get': function(picId) {
                 var base = "https://api.instagram.com/v1";
         
-                var clientId = '1ca7d98f346549fc95641d0b04307f82';
+                var clientId = 'yourclientcode';
                 var mediaRequest = '/media/' + picId
                 var url = base + mediaRequest;
 
