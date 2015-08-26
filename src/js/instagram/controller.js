@@ -15,7 +15,7 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 	  //close modal on swipe
  	$rootScope.swipe = function(){
 	 	ngDialog.close();
-	 }
+	 };
 
 	//magic media url on modal open
  $rootScope.modalOpen = function (itemUrl) {
@@ -117,7 +117,6 @@ $scope.$watch('$routeChangeStart', function(){
 				if (response2.meta.code !== 200) {
 
 				$scope.error = response2.meta.error_type + ' | ' + response2.meta.error_message;
-				console.log('nothing')
 
 			return;
 
@@ -132,7 +131,6 @@ $scope.$watch('$routeChangeStart', function(){
 			instagramSuccess($rootScope, response);
 		});
 		document.title = $scope.medias.user.username + "'s media | TAGORI.LA";
-			//			console.log(media.images.standard_resolution.url);
 			if ($scope.medias.videos){
 				$rootScope.openPlain($scope.medias.img.standard_resolution.url, $scope.medias.link, $scope.medias.caption.text, $scope.medias.user.username, $scope.medias.created_time, $scope.medias.videos.standard_resolution.url, $scope.medias.likes.count, $scope.medias.tags, $scope.medias.user.id, $scope.medias.id);
 				} else{
@@ -249,13 +247,13 @@ $scope.$watch('$routeChangeStart', function(){
 			}
 				}).
 			error(function(response) {
-				console.log('error');
+				
 				$scope.noMore = true;
 			});
 
 	      }	
 	       
-  	  }
+  	  };
 
 
  // scrollto element //

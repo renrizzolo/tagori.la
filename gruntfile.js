@@ -12,6 +12,11 @@ module.exports = function(grunt) {
         dest: 'dist/js/app.min.js'
       }
     },
+    jshint: {
+       
+      build: 'src/js/instagram/controller.js'
+    
+    },
       cssmin: {
       options: {
         banner: '/*\n <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n*/\n'
@@ -30,9 +35,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
 
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'cssmin']);
+  grunt.registerTask('default', ['uglify', 'cssmin', 'jshint']);
 
 };

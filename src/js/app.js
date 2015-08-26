@@ -15,7 +15,7 @@ var app = angular.module('app', ['ngAnimate', 'ngDialog', 'ngRoute', 'angular-pr
     'self',
 
     'https://scontent.cdninstagram.com/**'
-  ])
+  ]);
   }]).
     run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
     var original = $location.path;
@@ -93,7 +93,6 @@ app.factory('Instagram', ['$http',
         var clientId = 'yourclientcode';
         return {
             'get': function(count, searchText) {
-                    //  searchText =  encodeURIComponent(searchText);
 
                 var request = '/tags/' + searchText + '/media/recent';
                 var url = base + request;
@@ -162,7 +161,7 @@ app.factory('instaLink', ['$http',
                 var base = "https://api.instagram.com/oembed?url=http://instagram.com/p/";
         
                 var clientId = 'yourclientcode';
-                var mediaRequest = shortLink
+                var mediaRequest = shortLink;
                 var url = base + mediaRequest;
 
                 var config = {
@@ -185,7 +184,7 @@ app.factory('instaMedia', ['$http',
                 var base = "https://api.instagram.com/v1";
         
                 var clientId = 'yourclientcode';
-                var mediaRequest = '/media/' + picId
+                var mediaRequest = '/media/' + picId;
                 var url = base + mediaRequest;
 
                 var config = {
