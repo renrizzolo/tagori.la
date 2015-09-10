@@ -47,7 +47,7 @@
                         <h3 ng-if="form.text.$dirty">#{{searchText}}</h3>
                         <h3 ng-if="!form.text.$dirty" ng-show="search">#{{search}}</h3>
                    
-  <a class="grid" ng-show="items"  ng-click="gridClass = !gridClass">
+  <a class="grid" ng-show="items"  ng-click="gridClass = !gridClass;removeBrick()">
    <md-button class="md-icon-button"  style="height:40px;width:40px;"  aria-label="toggle grid view" >
   <md-icon style="line-height:0.6;left:1px;top:0px;" ng-class="gridClass ? 'glyphicon glyphicon-th' : 'glyphicon glyphicon-th-large'"class="" aria-hidden="true"></md-icon>
   </md-button>
@@ -61,12 +61,12 @@
             <div ng-class="gridClass ? 'col-sm-8 col-sm-offset-2' : 'col-md-12'">
               
                  
-                    <div class="panel-body" id="tag">
+                    <div masonry='{ "transitionDuration" : "0.4s" , "itemSelector" : ".animate"}' class="panel-body" id="tag">
                         
-                            <div class="" ng-class="gridClass ? 'instapic animate col-md-4 col-sm-6 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time') | limitTo: itemsDisplayedInList track by $index">
+                            <div masonry-tile class="" ng-class="gridClass ? 'instapic animate col-md-4 col-sm-6 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time') | limitTo: itemsDisplayedInList track by $index">
                            
-                                  <a ng-click="openPlain(item.images.standard_resolution.url, item.link, item.caption.text, item.user.username, item.created_time, item.videos.standard_resolution.url, item.likes.count, item.tags, item.user.id);modalOpen(item.link)">
-                                        <img preload-image ng-src="{{ item.images.low_resolution.url }}" default-image="img/loading-bubbles.svg" fallback-image="{{item.images.thumbnail.url}}"  title="" alt="">
+                                  <a class="tile" ng-click="openPlain(item.images.standard_resolution.url, item.link, item.caption.text, item.user.username, item.created_time, item.videos.standard_resolution.url, item.likes.count, item.tags, item.user.id);modalOpen(item.link)">
+                                        <img  preload-image ng-src="{{ item.images.low_resolution.url }}" default-image="img/loading-bubbles.svg" fallback-image="{{item.images.thumbnail.url}}"  title="" alt="">
                                         <span class="glyphicon glyphicon-play play" ng-show="item.videos.low_resolution.url.length>1" aria-hidden="true"></span>
                                   </a>
                                
@@ -88,7 +88,7 @@
                                
                     </div>
 
-                     <button class="next" ng-if="items"ng-hide="error"id="last" ng-disabled="loading" when-scrolled="loadMore()">
+                     <button class="next" ng-if="items"ng-hide="error"id="last" ng-disabled="loading" when-scrolled="loadMore()" ng-click="loadMore()">
                         <h3  ng-hide="noMore"> displaying {{filteredItems.length}} results. <br> 
                         <span ng-hide="loading" class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-top:10px;color:#2986E1;"></span> 
                         <br>

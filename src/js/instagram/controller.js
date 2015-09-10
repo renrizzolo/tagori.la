@@ -17,6 +17,8 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 	 	ngDialog.close();
 	 };
 
+	
+	
 	//magic media url on modal open
  $rootScope.modalOpen = function (itemUrl) {
  

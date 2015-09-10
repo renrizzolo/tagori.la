@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         banner: '/*\n <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n*/\n'
       },
       build: {
-        src: ['src/js/app.js', 'src/js/instagram/controller.js' ],
+        src: ['src/js/app-copy.js', 'src/js/instagram/controller.js' ],
         dest: 'dist/js/app.min.js'
       }
     },
