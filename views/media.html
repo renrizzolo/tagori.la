@@ -53,7 +53,7 @@
                         
                             <div  masonry-tile class="" ng-class="gridClass ? 'instapic instalist animate col-md-12 col-sm-12 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time')">
                            
-                                  <a ng-click="openPlain(item.images.standard_resolution.url, item.link, item.caption.text, item.user.username, item.created_time, item.videos.standard_resolution.url, item.likes.count, item.tags, item.user.id);modalOpen(item.link)">
+                                  <a ng-click="openPlain(item, media);modalOpen(item.link)">
                                         <img preload-image ng-src="{{ item.images.low_resolution.url }}" default-image="img/loading-bubbles.svg" fallback-image="{{item.images.thumbnail.url}}"  title="" alt="">
                                         <span class="glyphicon glyphicon-play play" ng-show="item.videos.low_resolution.url.length>1" aria-hidden="true"></span>
                                   </a>

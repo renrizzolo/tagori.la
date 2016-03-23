@@ -17,7 +17,8 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 	 	ngDialog.close();
 	 };
 
-	
+	//setTimeout(function(){ $rootScope.$broadcast('masonry.reload'); }, 1000);
+
 	
 	//magic media url on modal open
  $rootScope.modalOpen = function (itemUrl) {
@@ -29,16 +30,20 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 	$location.path('/media/' + $scope.what.instaUrl, false);
 	};
 	// Modal //
-	 $rootScope.openPlain = function(url, link, text, user, date, vid, likes, tags, id, media) {
-		$scope.what.enl = url;
- 		$scope.what.lin = link;	
- 		$scope.what.cap = text;	
- 		$scope.what.usern = user; 
- 		$scope.what.daty = date;
- 		$scope.what.video = vid;
- 		$scope.what.likes = likes;
- 		$scope.what.tags = tags;
- 		$scope.what.uId = id;
+	 $rootScope.openPlain = function(item, media) {
+
+
+	 //	item.images.standard_resolution.url, item.link, item.caption.text, item.user.username, item.created_time, item.videos.standard_resolution.url, item.likes.count, item.tags, item.user.id
+		$scope.what.enl = (item.images ? item.images.standard_resolution.url : '' );
+ 		$scope.what.lin = item.link;	
+ 		$scope.what.cap = item.caption.text;	
+ 		$scope.what.usern = item.user.username; 
+ 		$scope.what.daty = item.created_time;
+ 		$scope.what.commentCount = item.comments.count;
+ 		$scope.what.video = (item.videos ? item.videos.standard_resolution.url : '' );
+ 		$scope.what.likes = item.likes.count;
+ 		$scope.what.tags = item.tags;
+ 		$scope.what.uId = item.user.id;
  		$scope.what.mediaId = media;
 
 	//	$scope.what.cap = $scope.what.cap.replace(/([#]+[A-Za-z0-9-_]+)/g, '');
@@ -57,7 +62,7 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
                                            	
                                 '</video>'+  
 				                    '<div class="modal-pic col-md-8" ng-hide="what.video.length>1">'+                
-				                       '<a ng-href="{{what.enl}}">'+
+				                       '<a ng-href="{{what.enl}}" target="_blank">'+
 				                            '<img preload-image ng-src="{{what.enl}}" default-image="img/loading-bubbles.svg" src="" alt="">'+
 				                            '</a>'+
 				                    '</div>'+
@@ -65,7 +70,7 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
             								'<h1><a ng-href="http://tagori.la/user/{{what.uId}}">{{what.usern}}</a></h1>'+
 
 				                             '<div class="pull-right modal-likes"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{what.likes}}</div>'+
-				                             	'<div class="date">{{what.daty*1000 | date}}</div>'+
+				                             	'<div class="date">{{what.daty*1000 | date}} | {{what.commentCount}} comments</div>'+
 				                              	'<p class="modal-close">*swipe to close</p>'+
 
 				                            	'<p>{{what.cap}}</p>'+
@@ -73,6 +78,8 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 				                            	'<div class="tag-container"><md-button ng-click="tagLink(tag)" ng-repeat="tag in what.tags" class="tags md-raised md-primary"> #{{tag}} </md-button></div>'+
 				                            	'<md-button class="md-primary" aria-label="Open in Instagram" style="display:block;text-align:right;" ng-href="{{what.lin}}">'+
 				                        'Open in Instagram <span class="glyphicon glyphicon-share-alt"></md-button>'+
+				                        				                       '<a ng-href="{{what.enl}}.jpg.html" target="_blank">ASCII version</a>'+
+
 				                        	
 									'</div>'+
 			        			'</div>',
