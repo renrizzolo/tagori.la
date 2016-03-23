@@ -70,7 +70,9 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
             								'<h1><a ng-href="http://tagori.la/user/{{what.uId}}">{{what.usern}}</a></h1>'+
 
 				                             '<div class="pull-right modal-likes"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{what.likes}}</div>'+
-				                             	'<div class="date">{{what.daty*1000 | date}} | {{what.commentCount}} comments</div>'+
+				                             	'<div class="date">{{what.daty*1000 | date:"mediumDate"}}<br>'+
+				                             	'<small>{{what.daty*1000 | date:"shortTime"}}</small></div>'+
+				                             	 //| {{what.commentCount}} comments
 				                              	'<p class="modal-close">*swipe to close</p>'+
 
 				                            	'<p>{{what.cap}}</p>'+
@@ -136,16 +138,16 @@ $scope.$watch('$routeChangeStart', function(){
 
 			}
 
-			Instagram3.get(6,  $scope.medias.user.id).success(function(response) {
+			Instagram3.get(1,  $scope.medias.user.id).success(function(response) {
 			instagramSuccess($rootScope, response);
 		});
 		document.title = $scope.medias.user.username + "'s media | TAGORI.LA";
-			if ($scope.medias.videos){
-				$rootScope.openPlain($scope.medias.img.standard_resolution.url, $scope.medias.link, $scope.medias.caption.text, $scope.medias.user.username, $scope.medias.created_time, $scope.medias.videos.standard_resolution.url, $scope.medias.likes.count, $scope.medias.tags, $scope.medias.user.id, $scope.medias.id);
-				} else{
-				$rootScope.openPlain($scope.medias.img.standard_resolution.url, $scope.medias.link, $scope.medias.caption.text, $scope.medias.user.username, $scope.medias.created_time, [], $scope.medias.likes.count, $scope.medias.tags, $scope.medias.user.id, $scope.medias.id);
+			// if ($scope.medias.videos){
+				$rootScope.openPlain($scope.medias, $scope.medias.id);
+				// } else{
+				// $rootScope.openPlain($scope.medias.img.standard_resolution.url, $scope.medias.link, $scope.medias.caption.text, $scope.medias.user.username, $scope.medias.created_time, [], $scope.medias.likes.count, $scope.medias.tags, $scope.medias.user.id, $scope.medias.id);
 
-				}
+				// }
 
 			});
 
