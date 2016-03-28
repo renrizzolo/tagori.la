@@ -46,12 +46,14 @@
    <div class="heading text-center" id="hashtext">
 
     <div ng-if="items.length>0">
-
+<script>console.log(items);</script>
                                     <img ng-src="{{items[0].user.profile_picture}}" class="profile-pic border">
 
-                    <h2><a ng-href="http://instagram.com/{{items[0].user.username}}">{{items[0].user.full_name}}<strong> ({{items[0].user.username}}) <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
+                    <h2><a ng-href="http://instagram.com/{{items[0].user.username}}">{{items[0].user.full_name}}{{items[0].user.bio}}{{items[0].user.full_name}}{{items[0].user.website}}{{items[0].user.counts.follows}}<small> ({{items[0].user.bio}}) <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
                       
-                    </span></strong></a></h2>
+                    </span></small></a></h2>
+                    <p>{{items[0].user.bio}}</p>
+                    <a href="{{items[0].user.website}}">{{items[0].user.website}}</a>
                   </div>
                       <a class="grid" ng-show="items"  ng-click="gridClass = !gridClass;removeBrick()">
  <md-button class="md-icon-button"  style="height:40px;width:40px;" aria-label="toggle grid view" >

@@ -24,7 +24,7 @@
                         masonry.layout();
     
                         elem.children(options.itemSelector).css('visibility', 'visible');
-                    }, 120);
+                    }, 750);
                 };
                
                 scope.removeBrick = function() {

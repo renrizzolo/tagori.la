@@ -19,7 +19,18 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 
 	//setTimeout(function(){ $rootScope.$broadcast('masonry.reload'); }, 1000);
 
-	
+//endswith polyfill
+	if (!String.prototype.endsWith) {
+  String.prototype.endsWith = function(searchString, position) {
+      var subjectString = this.toString();
+      if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+        position = subjectString.length;
+      }
+      position -= searchString.length;
+      var lastIndex = subjectString.indexOf(searchString, position);
+      return lastIndex !== -1 && lastIndex === position;
+  };
+}
 	//magic media url on modal open
  $rootScope.modalOpen = function (itemUrl) {
  
@@ -45,7 +56,14 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
  		$scope.what.tags = item.tags;
  		$scope.what.uId = item.user.id;
  		$scope.what.mediaId = media;
+ 		$scope.what.imageSource = $scope.what.enl;
 
+ 		if ( $scope.what.imageSource.endsWith('.jpg') ) {
+ 			$scope.what.imageSource = $scope.what.imageSource+'.html';
+ 		} else {
+ 			$scope.what.imageSource = $scope.what.imageSource+'.jpg.html';
+ 		}
+ 		console.log($scope.what.imageSource);
 	//	$scope.what.cap = $scope.what.cap.replace(/([#]+[A-Za-z0-9-_]+)/g, '');
 		
 				$rootScope.theme = 'ngdialog-theme-plain';
@@ -80,7 +98,7 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 				                            	'<div class="tag-container"><md-button ng-click="tagLink(tag)" ng-repeat="tag in what.tags" class="tags md-raised md-primary"> #{{tag}} </md-button></div>'+
 				                            	'<md-button class="md-primary" aria-label="Open in Instagram" style="display:block;text-align:right;" ng-href="{{what.lin}}">'+
 				                        'Open in Instagram <span class="glyphicon glyphicon-share-alt"></md-button>'+
-				                        				                       '<a ng-href="{{what.enl}}.jpg.html" target="_blank">ASCII version</a>'+
+				                        				                       '<a ng-href="{{what.imageSource}}" target="_blank">ASCII version</a>'+
 
 				                        	
 									'</div>'+
