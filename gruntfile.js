@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       },
       build: {
         files: {
-          'css/style.min.css': 'css/**.css'
+          'css/style.min.css': ['css/style.css','css/ngDialog.min.css','css/ngDialog-theme-plain.css']
         }
       }
     },

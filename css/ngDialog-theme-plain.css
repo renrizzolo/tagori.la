@@ -16,7 +16,7 @@
 .ngdialog.ngdialog-theme-plain h1 {
   padding-bottom: 0.5rem;
   font-weight: bold;
-  color:#053E72;
+  color:#272727;
   margin: 0;
 }
 @media screen and (max-width:991px){
@@ -35,10 +35,10 @@
 
 
 .ngdialog.ngdialog-theme-plain h1 a{
-  color:#053E72;
+  color:#272727;
 }
 .ngdialog.ngdialog-theme-plain h1 a:hover{
-  color:#45B8C0;
+  color:#484848;
 }
 .ngdialog.ngdialog-theme-plain .ngdialog-content h1,
 .ngdialog.ngdialog-theme-plain .ngdialog-content h2,
@@ -178,7 +178,7 @@ transform-origin: 50%;
 }
 
 .ngdialog.ngdialog-theme-plain .ngdialog-button.ngdialog-button-primary {
-  background: #053E72;
+  background: #272727;
   color: #fff;
 }
 .ngdialog.ngdialog-theme-plain .ngdialog-button.ngdialog-button-primary:hover {
@@ -186,6 +186,6 @@ transform-origin: 50%;
   color: #fff;
 }
 .ngdialog.ngdialog-theme-plain .ngdialog-button.ngdialog-button-secondary {
-  background: #053E72;
+  background: #272727;
   color: #777;
 }

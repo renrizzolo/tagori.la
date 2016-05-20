@@ -42,7 +42,7 @@
       </div>
 </div>
 </div>
-   <div class="heading text-center" id="hashtext">
+   <div class="heading col-lg-12 text-center" id="hashtext">
 
                         <h3 ng-if="form.text.$dirty">#{{searchText}}</h3>
                         <h3 ng-if="!form.text.$dirty" ng-show="search">#{{search}}</h3>
@@ -63,7 +63,8 @@
                  
                     <div masonry='{ "transitionDuration" : "0.4s" , "itemSelector" : ".animate"}' class="panel-body" id="tag">
                         
-                            <div masonry-tile class="" ng-class="gridClass ? 'instapic animate col-md-4 col-sm-6 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time') | limitTo: itemsDisplayedInList track by $index">
+                            <div masonry-tile class="" ng-class="gridClass ? 'instapic animate col-md-4 col-sm-6 col-xs-12' : 'instapic animate col-md-1 col-sm-3 col-xs-4'"
+                            ng-repeat="item in filteredItems = (items.slice().reverse() | filter:searchText | orderBy: '-created_time') | limitTo: itemsDisplayedInList track by $index">
                            
                                   <a class="tile" ng-click="openPlain(item);modalOpen(item.link)">
                                         <img  preload-image ng-src="{{ item.images.low_resolution.url }}" default-image="img/loading-bubbles.svg" fallback-image="{{item.images.thumbnail.url}}"  title="" alt="">
@@ -71,7 +72,7 @@
                                   </a>
                                
                               
-                                <a class="profile" ng-href="http://tagori.la/user/{{item.user.id}}" style="cursor:pointer;">
+                                <a class="profile" ng-href="/user/{{item.user.id}}" style="cursor:pointer;">
                                 {{item.user.username}} 
                                     <span class="likes">
                                         <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
@@ -90,7 +91,7 @@
 
                      <button class="next" ng-if="items"ng-hide="error"id="last" ng-disabled="loading" when-scrolled="loadMore()" ng-click="loadMore()">
                         <h3  ng-hide="noMore"> displaying {{filteredItems.length}} results. <br> 
-                        <span ng-hide="loading" class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-top:10px;color:#2986E1;"></span> 
+                        <span ng-hide="loading" class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-top:10px;"></span> 
                         <br>
                       <img ng-show="loading" class="loading-text" ng-src="img/loading-bubbles.svg"></h3>
 

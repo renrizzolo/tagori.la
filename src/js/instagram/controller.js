@@ -1,8 +1,8 @@
 'use strict';
 
 
-app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog',
-	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog) {
+app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'tagorila_user', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog',
+	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, tagorila_user, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog) {
 	  $rootScope.what = [];
 	  $rootScope.modal = [];
 	  $rootScope.modal.yo = [];
@@ -10,7 +10,7 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 
 	  //modal hashtag links
 	  $rootScope.tagLink = function(tag){
-	  	 window.open("http://tagori.la/search/" + tag +"", "_self");	
+	  	 window.open("/search/" + tag +"", "_self");	
 	  };
 	  //close modal on swipe
  	$rootScope.swipe = function(){
@@ -85,7 +85,7 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 				                            '</a>'+
 				                    '</div>'+
 				                    '<div class="modal-text col-md-4">'+                
-            								'<h1><a ng-href="http://tagori.la/user/{{what.uId}}">{{what.usern}}</a></h1>'+
+            								'<h1><a ng-href="/user/{{what.uId}}">{{what.usern}}</a></h1>'+
 
 				                             '<div class="pull-right modal-likes"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{what.likes}}</div>'+
 				                             	'<div class="date">{{what.daty*1000 | date:"mediumDate"}}<br>'+
@@ -133,7 +133,7 @@ $scope.$watch('$routeChangeStart', function(){
  	        $rootScope.items=null;
  	        $rootScope.pagination=null;
 
-	 if ($scope.view === "media" && $scope.search.length > 9){
+	if ($scope.view === "media" && $scope.search.length > 9){
 
 	instaLink.get($scope.search).success(function(response) {
 
@@ -142,7 +142,7 @@ $scope.$watch('$routeChangeStart', function(){
 			$scope.shortLink = response.media_id;
 
 
-			instaMedia.get($scope.shortLink).success(function(response2) {
+		instaMedia.get($scope.shortLink).success(function(response2) {
 				if (response2.meta.code !== 200) {
 
 				$scope.error = response2.meta.error_type + ' | ' + response2.meta.error_message;
@@ -156,20 +156,26 @@ $scope.$watch('$routeChangeStart', function(){
 
 			}
 
+			tagorila_user.get($scope.medias.user.id).success(function(response) {
+			instagramUser($rootScope, response);
+
+			
+			});
+
 			Instagram3.get(1,  $scope.medias.user.id).success(function(response) {
 			instagramSuccess($rootScope, response);
-		});
-		document.title = $scope.medias.user.username + "'s media | TAGORI.LA";
+			});
+			document.title = $scope.medias.user.username + "'s media | TAGORI.LA";
 			// if ($scope.medias.videos){
-				$rootScope.openPlain($scope.medias, $scope.medias.id);
+			$rootScope.openPlain($scope.medias, $scope.medias.id);
 				// } else{
 				// $rootScope.openPlain($scope.medias.img.standard_resolution.url, $scope.medias.link, $scope.medias.caption.text, $scope.medias.user.username, $scope.medias.created_time, [], $scope.medias.likes.count, $scope.medias.tags, $scope.medias.user.id, $scope.medias.id);
 
 				// }
 
-			});
+		});
 
-				});
+	});
 
 			
 
@@ -201,6 +207,14 @@ $scope.$watch('$routeChangeStart', function(){
 			$scope.gotoElement('hashtext');
 
 			document.title = $scope.items[0].user.username+"'s feed' | TAGORI.LA";
+			
+
+			});
+			tagorila_user.get($scope.search).success(function(response) {
+			instagramUser($rootScope, response);
+
+			//console.log($scope.user_item);
+			
 			});
    	} 
    	// default (/user)
@@ -327,7 +341,7 @@ $scope.$watch('$routeChangeStart', function(){
 				scope.pagination = res.pagination.next_url;
 			
 				
-			}
+				}
 			}  
 				
 		 else {
@@ -385,6 +399,53 @@ $scope.$watch('$routeChangeStart', function(){
 		        
 		        .title('Error')
 		        .content("This media has returned no results")
+		        .ariaLabel('Error')
+		        .ok('Ok')
+		        .targetEvent(ev)
+		        );
+		      
+		 });
+			}
+		};
+
+			var instagramUser = function(scope, res) {
+
+			if (res.meta.code !== 200) {
+				scope.error;
+				
+				$scope.$watch('scope.error', function(ev) { 
+ 				$mdDialog.show(
+      			$mdDialog.alert()
+        
+			        .title('Error')
+			        .content(res.meta.error_type + ' | ' + res.meta.error_message)
+			        .ariaLabel('Error')
+			        .ok('Ok')
+			        .targetEvent(ev)
+			        );
+	      
+				 });
+			scope.error='';
+			return;
+							
+			}
+
+			if (res.data ) {
+				scope.error = '';
+				scope.user_item = res.data;
+				
+				}
+			  
+				
+		 else {
+				scope.error;
+				
+				$scope.$watch('scope.error', function(ev) { 
+		 		$mdDialog.show(
+		      	$mdDialog.alert()
+		        
+		        .title('Error')
+		        .content("This user id has returned no results")
 		        .ariaLabel('Error')
 		        .ok('Ok')
 		        .targetEvent(ev)

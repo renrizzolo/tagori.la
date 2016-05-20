@@ -43,18 +43,29 @@
           </div>
       </div>
 </div>
-   <div class="heading text-center" id="hashtext">
+   <div class="heading col-md-12" id="hashtext">
+    <div ng-if="items.length>0" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
 
-    <div ng-if="items.length>0">
-<script>console.log(items);</script>
-                                    <img ng-src="{{items[0].user.profile_picture}}" class="profile-pic border">
+<div class="row">
+  <div class="col-sm-3">
+                <img ng-src="{{user_item.profile_picture}}" class="profile-pic border">
 
-                    <h2><a ng-href="http://instagram.com/{{items[0].user.username}}">{{items[0].user.full_name}}{{items[0].user.bio}}{{items[0].user.full_name}}{{items[0].user.website}}{{items[0].user.counts.follows}}<small> ({{items[0].user.bio}}) <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
-                      
-                    </span></small></a></h2>
-                    <p>{{items[0].user.bio}}</p>
-                    <a href="{{items[0].user.website}}">{{items[0].user.website}}</a>
-                  </div>
+  </div>
+  <div class="col-sm-9">
+      <h2>
+              {{user_item.full_name}}
+              </h2>
+                <a class="md-primary md-button md-default-theme" ng-href="https://instagram.com/{{user_item.username}}">
+                  {{user_item.username}} <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+                </a>
+                <h5>{{user_item.bio}}</h5>
+                <a href="{{user_item.website}}">{{user_item.website}}</a>
+                <p>Following: {{user_item.counts.follows}} | Followed by: {{user_item.counts.followed_by}}</p>
+  </div>
+</div>
+            
+
+    </div>
                       <a class="grid" ng-show="items"  ng-click="gridClass = !gridClass;removeBrick()">
  <md-button class="md-icon-button"  style="height:40px;width:40px;" aria-label="toggle grid view" >
 <md-icon style="line-height:0.6;left:1px;top:0px;" ng-class="gridClass ? 'glyphicon glyphicon-th' : 'glyphicon glyphicon-th-large'"class="" aria-hidden="true"></md-icon>
@@ -67,7 +78,7 @@
 
       
 
-              <div ng-class="gridClass ? 'col-sm-8 col-sm-offset-2' : 'col-md-12'">
+              <div ng-class="gridClass ? 'col-sm-8 col-sm-offset-2' : 'col-xs-12'">
                 
 
                 <div masonry='{ "transitionDuration" : "0.4s" , "itemSelector" : ".animate"}' class="panel-body" id="user">
@@ -100,7 +111,7 @@
 
                <button class="next"ng-if="items"ng-hide="error"id="last" ng-disabled="loading" when-scrolled="loadMore()" ng-click="loadMore()">
                         <h3  ng-hide="noMore"> displaying {{filteredItems.length}} results. <br> 
-                        <span ng-hide="loading" class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-top:10px;color:#2986E1;"></span> 
+                        <span ng-hide="loading" class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-top:10px;"></span> 
                         <br>
                         <img ng-show="loading"  class="loading-text" ng-src="img/loading-bubbles.svg"></h3>
                         <h3 ng-show="noMore">No more results</h3>
