@@ -1,7 +1,8 @@
 'use strict';
 
 
-app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog', 'VideosService','youtubeRelated'
+app.controller('SearchCtrl', 
+	['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog', 'VideosService', 'youtubeRelated',
 
 	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog, VideosService,youtubeRelated) {
 	  $rootScope.what = [];
@@ -10,7 +11,7 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 	  $rootScope.modal = [];
 	  $rootScope.modal.yo = [];
 	  $scope.location = $location;
-
+ $scope.related = [];
       $scope.youtube = VideosService.getYoutube();
 
 	  //modal hashtag links
@@ -144,7 +145,10 @@ $scope.dateParse = function(difference){
 // use search query in url for instagram.get //
 
 $scope.$watch('$routeChangeStart', function(){
-		
+		  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 			var pathParts = $location.path().split('/');
  	        $scope.search.term = pathParts[2];
  	        $scope.view = pathParts[1];
@@ -203,11 +207,57 @@ $scope.$watch('$routeChangeStart', function(){
 
 	// 	 }
 
-		$scope.youtueRelated = function(){
-		youtubeRelated.get(8,  $scope.youtube.videoId, $scope.pagination)
-  			.success(function(response) {
-				instagramSuccess($scope.related, response);
+
+		$scope.youtubeRelated = function(more){
+
+				$scope.related.items = [];
+				$scope.related.noMore = false;
+				$scope.related.itemsDisplayedInList = 6;
+				console.log($scope.youtube);
+			youtubeRelated.get(6,  $scope.youtube.videoId, $scope.related.pagination)
+
+			.success(function(response) {
+			if (response.error) {
+				$scope.related.error = response.error.code + ' | ' + response.error.message;
+				return;
+			}
+			if (response.items.length > 0) {
+				$scope.related.pagination = response.nextPageToken;
+				$scope.related.prev = response.nextPageToken;
+				$scope.related.items = response.items;
+				$scope.related.loading = false;
+
+				if($scope.related.itemsDisplayedInList <= $scope.related.items.length){
+         		$scope.related.itemsDisplayedInList = $scope.related.itemsDisplayedInList + 6;
+         		$scope.loading = false;
+
+      		}
+
+			if (response.items.length < 1) {
+
+				$scope.related.error = "no more results";
+			}
+			} else {
+				$scope.related.error = "no results";
+				
+			}
+				}).
+			error(function(response) {
+				
+				$scope.related.noMore = true;
 			});
+			// } else if (more == "less") {
+
+			// }else {
+			// $scope.related.items = [];
+			// youtubeRelated.get(6,  $scope.youtube.videoId, $scope.related.pagination)
+  	// 		.success(function(response) {
+			// 	instagramSuccess($scope.related, response);
+			// 	console.log($scope.related);
+			
+			
+			
+		
 		};
 
   switch($scope.search.dateAfter){
@@ -316,7 +366,7 @@ $scope.$watch('$routeChangeStart', function(){
          		$scope.itemsDisplayedInList = $scope.itemsDisplayedInList + 24;
          		$scope.loading = false;
 
-      }
+      		}
 
 			if (response.items.length < 1) {
 
@@ -339,6 +389,17 @@ $scope.$watch('$routeChangeStart', function(){
 //launch video function
  	$scope.launch = function (id, title) {
     	VideosService.launchPlayer(id, title);
+    	var vid = $scope.youtube.videoId;
+    	var vidItem = 'item-'+vid;
+      //  appendBricks(vid);
+
+            //    $rootScope.$broadcast('masonry.append');
+
+       // vid.destroy();
+        
+    };
+    	$scope.launchRelated = function (id, title) {
+    	VideosService.launchRelated(id, title);
     };
  	$scope.stopVideo = function () {
    		VideosService.stop();
@@ -353,9 +414,7 @@ $scope.$watch('$routeChangeStart', function(){
     VideosService.pause();
     };
 
-     $scope.expandVid = function (eID){
-     	VideosService.expandVid(eID);
-	}
+
 
  // scrollto element //
 
@@ -411,7 +470,7 @@ $scope.$watch('$routeChangeStart', function(){
 		      	$mdDialog.alert()
 		        
 		        .title('Error')
-		        .content("This hashtag has returned no results")
+		        .content("This query has returned no results")
 		        .ariaLabel('Error')
 		        .ok('Ok')
 		        .targetEvent(ev)

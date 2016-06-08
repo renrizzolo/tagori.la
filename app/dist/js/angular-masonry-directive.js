@@ -36,12 +36,17 @@
                 
                 scope.appendBricks = function(ele) {
                     masonry.appended(ele);
+                        masonry.reloadItems();
+                        masonry.layout();
                 };                
                 
                 scope.$on('masonry.layout', function() {
                     masonry.layout();                 
                 });
-                
+                scope.$on('masonry.append', function(ele) {
+                    masonry.appended(ele);                 
+                });
+
                 scope.update();
             }
         };

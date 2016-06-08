@@ -21,10 +21,7 @@ var app = angular.module('app', ['ngAnimate', 'ngDialog', 'ngRoute', 'angular-pr
 
   }]).
     run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
-          var tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
-  var firstScriptTag = document.getElementsByTagName('script')[0];
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
 
     var original = $location.path;
     $location.path = function (path, reload) {
@@ -121,7 +118,7 @@ app.service('VideosService', ['$window', '$rootScope', '$log', function ($window
     $log.info('YouTube Player is ready');
     youtube.player.loadVideoById(youtube.videoId);
     service.expandVid(youtube.playerId);
-    youtube.videoId = $rootScope.video.id;
+   // youtube.videoId = $rootScope.video.id;
 
   }
 
@@ -212,20 +209,23 @@ app.service('VideosService', ['$window', '$rootScope', '$log', function ($window
         var oldHeight = oldSize.height;
         var oldWidth = oldSize.width;
 
-        var newWidth = (oldWidth * 3);
+        var newWidth = (oldWidth * 2);
 
         var oldVid = document.getElementsByClassName('expand');
          console.log(oldVid);
-
-        var i;
+                 //dont enlarge related videos coz it's broken
+   var i;
         for (i = 0; i < oldVid.length; i++) {
             oldVid[i].style.width = "16.66666667%";
             oldVid[i].style.margin = "0";
         }  
 
-        vid.className = "expand";
-        vid.style.width = "calc(50% - 20px)";
+     
+        vid.className += " expand";
+        console.log(newWidth);
+        vid.style.width = 'calc('+newWidth+'px - 20px)';
         vid.style.margin = "10px";
+
 
         $rootScope.$broadcast('masonry.layout');
 
@@ -233,7 +233,7 @@ app.service('VideosService', ['$window', '$rootScope', '$log', function ($window
 
     this.launchPlayer = function (id, title) {
         youtube.videoId = id;
-    youtube.videoTitle = title;
+        youtube.videoTitle = title;
 
     console.log(youtube);
     service.bindPlayer('player-'+ id);
@@ -241,6 +241,16 @@ app.service('VideosService', ['$window', '$rootScope', '$log', function ($window
 
     return youtube;
     }
+    this.launchRelated = function (id, title) {
+        youtube.videoId = id;
+        youtube.videoTitle = title;
+
+    service.bindPlayer('player-'+ id);
+    service.loadPlayer();
+
+    return youtube;
+    }
+
    this.getYoutube = function () {
     return youtube;
     };
@@ -295,6 +305,7 @@ app.factory('youtubeRelated', ['$http',
                                 'callback': 'JSON_CALLBACK'
                             }
                         }; 
+                        console.log(config);
                 return $http.jsonp(url, config);
             }
         };

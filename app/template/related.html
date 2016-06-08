@@ -1,0 +1,38 @@
+
+                    <div class="md-dialog-container" id="relatedModal">
+                      <md-dialog>
+                        <md-dialog-content>
+                        <h1>blah</h1>
+                          <div class="instapic animate col-md-2 col-sm-3 col-xs-4" ng-repeat="item in items">
+                            <div style="margin:10px;">
+                                  <a class="tile" ng-click="launch(item.id.videoId, item.snippet.title);">
+
+                                        <img  preload-image ng-src="{{ item.snippet.thumbnails.high.url }}" default-image="img/loading-bubbles.svg" fallback-image="{{ item.snippet.thumbnails.default.url }}"  title="" alt="">
+                                    
+                                  </a>
+                                 <div id="player-{{item.id.videoId}}" style="position: absolute;left: 0;top: 0;z-index: 999;"></div>
+                         
+                              <div class="title-overlay">
+                                <h4 style="margin:0;">{{item.snippet.title}}</h4>
+                                 <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{item.snippet.channelTitle}}  -->
+                                 <small>{{item.snippet.date | date:"shortTime"}}</small>
+                              </div>
+                                <!-- <a class="profile" ng-href="/user/{{tem.snippet.channelId}}" style="cursor:pointer;"> -->
+                                  
+                               
+                            </div>       
+                           
+                          </div>
+
+                            <div ng-show="error" class="error">
+     
+                            </div> 
+                              <md-dialog-actions>
+               <md-button ng-click="closeDialog()" class="md-primary">' +
+                Close
+              </md-button>
+            </md-dialog-actions>
+                        </md-dialog-content>
+                      </md-dialog>
+   
+                    </div>
