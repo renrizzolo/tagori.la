@@ -1,12 +1,17 @@
 'use strict';
 
 
-app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'tagorila_user', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog',
-	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, tagorila_user, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog) {
+app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog', 'VideosService','youtubeRelated'
+
+	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog, VideosService,youtubeRelated) {
 	  $rootScope.what = [];
+	  $rootScope.video = [];
+	  $rootScope.video.id = []
 	  $rootScope.modal = [];
 	  $rootScope.modal.yo = [];
 	  $scope.location = $location;
+
+      $scope.youtube = VideosService.getYoutube();
 
 	  //modal hashtag links
 	  $rootScope.tagLink = function(tag){
@@ -42,73 +47,58 @@ app.controller('SearchCtrl', ['$scope', '$rootScope', '$route', '$routeParams', 
 	};
 	// Modal //
 	 $rootScope.openPlain = function(item, media) {
-
+console.log(item);
 
 	 //	item.images.standard_resolution.url, item.link, item.caption.text, item.user.username, item.created_time, item.videos.standard_resolution.url, item.likes.count, item.tags, item.user.id
-		$scope.what.enl = (item.images ? item.images.standard_resolution.url : '' );
- 		$scope.what.lin = item.link;	
- 		$scope.what.cap = item.caption.text;	
- 		$scope.what.usern = item.user.username; 
- 		$scope.what.daty = item.created_time;
- 		$scope.what.commentCount = item.comments.count;
- 		$scope.what.video = (item.videos ? item.videos.standard_resolution.url : '' );
- 		$scope.what.likes = item.likes.count;
- 		$scope.what.tags = item.tags;
- 		$scope.what.uId = item.user.id;
+ 		$scope.what.lin = item.id.videoId;	
+ 		$scope.what.cap = item.snippet.description;	
+ 		$scope.what.usern = item.snippet.channelName; 
+ 		$scope.what.daty = item.publishedAt;
+ 		$scope.what.uId = item.snippet.channelId;
  		$scope.what.mediaId = media;
- 		$scope.what.imageSource = $scope.what.enl;
+ 		$scope.video.id = item.id;
 
- 		if ( $scope.what.imageSource.endsWith('.jpg') ) {
- 			$scope.what.imageSource = $scope.what.imageSource+'.html';
- 		} else {
- 			$scope.what.imageSource = $scope.what.imageSource+'.jpg.html';
- 		}
- 		console.log($scope.what.imageSource);
-	//	$scope.what.cap = $scope.what.cap.replace(/([#]+[A-Za-z0-9-_]+)/g, '');
-		
-				$rootScope.theme = 'ngdialog-theme-plain';
-				var dialog = ngDialog.open({
+		var dialog = ngDialog.open({
+		    template: 'modalTemplate.html',
+		    className: 'ngdialog-theme-plain',
+		    scope: $scope
+		});
 
-					template: 	
+		       //   document.getElementById('player').appendChild(document.getElementById('player'));
+
+
+
+				// 		$rootScope.theme = 'ngdialog-theme-plain';
+				// var dialog = ngDialog.open({
+
+				// 	template: 	
 			
-					'<div class="ngdialog-message col-md-8 col-md-push-2" md-swipe-left="swipe()"  md-swipe-right="swipe()">'+
+				// 	'<div class="ngdialog-message col-md-8 col-md-push-2" md-swipe-left="swipe()"  md-swipe-right="swipe()">'+
             				
                                        		
-			                    '<div class="panel-body row">'+  
+			 //                    '<div class="panel-body row">'+  
+				// 					'<div id="placeholder"></div>'+
+                            	
+				//                     '<div class="modal-text col-md-4">'+                
+    //         								'<h1><a ng-href="http://tagori.la/user/{{what.uId}}">{{what.usern}}</a></h1>'+
 
-                            	'<video class="vid col-md-8" ng-show="what.video.length>1" width="100%" height="auto" controls  src="{{what.video}}"  type="video/mp4">'+
-                                           	
-                                '</video>'+  
-				                    '<div class="modal-pic col-md-8" ng-hide="what.video.length>1">'+                
-				                       '<a ng-href="{{what.enl}}" target="_blank">'+
-				                            '<img preload-image ng-src="{{what.enl}}" default-image="img/loading-bubbles.svg" src="" alt="">'+
-				                            '</a>'+
-				                    '</div>'+
-				                    '<div class="modal-text col-md-4">'+                
-            								'<h1><a ng-href="/user/{{what.uId}}">{{what.usern}}</a></h1>'+
+				//                              '<div class="pull-right modal-likes"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{what.likes}}</div>'+
+				//                              	'<div class="date">{{what.daty | date:"mediumDate"}}<br>'+
+				//                              	'<small>{{what.daty*1000 | date:"shortTime"}}</small></div>'+
+				//                               	'<p class="modal-close">*swipe to close</p>'+
 
-				                             '<div class="pull-right modal-likes"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> {{what.likes}}</div>'+
-				                             	'<div class="date">{{what.daty*1000 | date:"mediumDate"}}<br>'+
-				                             	'<small>{{what.daty*1000 | date:"shortTime"}}</small></div>'+
-				                             	 //| {{what.commentCount}} comments
-				                              	'<p class="modal-close">*swipe to close</p>'+
-
-				                            	'<p>{{what.cap}}</p>'+
-				                            	'<p><strong>Tags:</strong></p>'+
-				                            	'<div class="tag-container"><md-button ng-click="tagLink(tag)" ng-repeat="tag in what.tags" class="tags md-raised md-primary"> #{{tag}} </md-button></div>'+
-				                            	'<md-button class="md-primary" aria-label="Open in Instagram" style="display:block;text-align:right;" ng-href="{{what.lin}}">'+
-				                        'Open in Instagram <span class="glyphicon glyphicon-share-alt"></md-button>'+
-				                        				                       '<a ng-href="{{what.imageSource}}" target="_blank">ASCII version</a>'+
-
+				//                             	'<p>{{what.cap}}</p>'+
+				//                             	'<p><strong>Tags:</strong></p>'+
+				//                             	'<div class="tag-container"><md-button ng-click="tagLink(tag)" ng-repeat="tag in what.tags" class="tags md-raised md-primary"> #{{tag}} </md-button></div>'+
+				                            
 				                        	
-									'</div>'+
-			        			'</div>',
+				// 					'</div>'+
+			 //        			'</div>',
 					
-					className: 'ngdialog-theme-plain',
-					plain: true
+				// 	className: 'ngdialog-theme-plain',
+				// 	plain: true
 					
-				});
-
+				// });
 dialog.closePromise.then(function (data) {
     if ($route.current.scope.view === "search"){
     $location.path('/'+ $route.current.scope.view + '/' + $route.current.params.searchText, false);
@@ -119,81 +109,133 @@ dialog.closePromise.then(function (data) {
 
 });
 			};
+$scope.search = [];
+$scope.search.results = 24;
 
-		
+$scope.search.date = [];
 
+
+$scope.dateParse = function(difference){
+	var date = new Date(new Date().setDate(new Date().getDate() - difference));
+	var dateISO = date.toISOString();
+	return dateISO;
+};
+
+
+// var year = new Date(new Date().setDate(new Date().getDate() - 365));
+// var yearISO = year.toISOString();
+// $scope.search.year = yearISO;
+
+// var threeMonth = new Date(new Date().setDate(new Date().getDate() - 90));
+// var threeMonthISO = threeMonth.toISOString();
+// $scope.search.threeMonth = threeMonthISO;
+
+// var month = new Date(new Date().setDate(new Date().getDate() - 30));
+// var monthISO = month.toISOString();
+// $scope.search.month = monthISO;
+
+// var week = new Date(new Date().setDate(new Date().getDate() - 7));
+// var weekISO = week.toISOString();
+// $scope.search.sevenDays = weekISO;
+
+// var day = new Date(new Date().setDate(new Date().getDate() - 1));
+// var dayISO = day.toISOString();
+// $scope.search.day = dayISO;
 // use search query in url for instagram.get //
 
 $scope.$watch('$routeChangeStart', function(){
 		
 			var pathParts = $location.path().split('/');
- 	        $scope.search = pathParts[2];
+ 	        $scope.search.term = pathParts[2];
  	        $scope.view = pathParts[1];
- 	        $scope.modal = pathParts[3];
+ 	        if (pathParts[3] == null){
+ 	        $scope.search.order = 'relevance';
+			}else {
+ 	        $scope.search.order = pathParts[3];
+ 	    	}
+ 	    	if (pathParts[4] == null){
+ 	        $scope.search.dateAfter = 'any';
+			} else {
+ 	        $scope.search.dateAfter = pathParts[4];
+ 	    	}
  	        $rootScope.items=null;
  	        $rootScope.pagination=null;
 
-	if ($scope.view === "media" && $scope.search.length > 9){
+	//  if ($scope.view === "media" && $scope.search.term.length > 9){
 
-	instaLink.get($scope.search).success(function(response) {
+	// instaLink.get($scope.search.term).success(function(response) {
 
 				
 	
-			$scope.shortLink = response.media_id;
+	// 		$scope.shortLink = response.media_id;
 
 
-		instaMedia.get($scope.shortLink).success(function(response2) {
-				if (response2.meta.code !== 200) {
+	// 		instaMedia.get($scope.shortLink).success(function(response2) {
+	// 			if (response2.meta.code !== 200) {
 
-				$scope.error = response2.meta.error_type + ' | ' + response2.meta.error_message;
+	// 			$scope.error = response2.meta.error_type + ' | ' + response2.meta.error_message;
 
-			return;
+	// 		return;
 
-			} else{ 
+	// 		} else{ 
 	
-			$scope.medias = response2.data;
-			$scope.medias.img = response2.data.images;
+	// 		$scope.medias = response2.data;
+	// 		$scope.medias.img = response2.data.images;
 
-			}
+	// 		}
 
-			tagorila_user.get($scope.medias.user.id).success(function(response) {
-			instagramUser($rootScope, response);
+	// 		Instagram3.get(1,  $scope.medias.user.id).success(function(response) {
+	// 		instagramSuccess($rootScope, response);
+	// 	});
+	// 	document.title = $scope.medias.user.username + "'s media | TAGORI.LA";
+	// 		// if ($scope.medias.videos){
+	// 			$rootScope.openPlain($scope.medias, $scope.medias.id);
+	// 			// } else{
+	// 			// $rootScope.openPlain($scope.medias.img.standard_resolution.url, $scope.medias.link, $scope.medias.caption.text, $scope.medias.user.username, $scope.medias.created_time, [], $scope.medias.likes.count, $scope.medias.tags, $scope.medias.user.id, $scope.medias.id);
 
-			
-			});
+	// 			// }
 
-			Instagram3.get(1,  $scope.medias.user.id).success(function(response) {
-			instagramSuccess($rootScope, response);
-			});
-			document.title = $scope.medias.user.username + "'s media | TAGORI.LA";
-			// if ($scope.medias.videos){
-			$rootScope.openPlain($scope.medias, $scope.medias.id);
-				// } else{
-				// $rootScope.openPlain($scope.medias.img.standard_resolution.url, $scope.medias.link, $scope.medias.caption.text, $scope.medias.user.username, $scope.medias.created_time, [], $scope.medias.likes.count, $scope.medias.tags, $scope.medias.user.id, $scope.medias.id);
+	// 		});
 
-				// }
-
-		});
-
-	});
+	// 			});
 
 			
 
-		 }
+	// 	 }
 
+		$scope.youtueRelated = function(){
+		youtubeRelated.get(8,  $scope.youtube.videoId, $scope.pagination)
+  			.success(function(response) {
+				instagramSuccess($scope.related, response);
+			});
+		};
+
+  switch($scope.search.dateAfter){
+        case 'any': $scope.search.dateAfter = '1970-05-31T03:51:07.968Z';
+        break;
+        case 'day': $scope.search.dateAfter = $scope.dateParse(1);
+        break;
+        case 'week': $scope.search.dateAfter = $scope.dateParse(7);
+        break;
+        case 'month': $scope.search.dateAfter = $scope.dateParse(30);
+        break;
+        case 'threemonths': $scope.search.dateAfter = $scope.dateParse(90);
+        break;
+        case 'year': $scope.search.dateAfter = $scope.dateParse(365);
+     }
 	//search
-	  if    ($scope.view === "search" && $scope.search.length > 1) {
-	  		Instagram.get(24,  $scope.search).success(function(response) {
+	  if    ($scope.view === "search" && $scope.search.term.length > 1) {
+	  		Instagram.get($scope.search.results,  $scope.search.term, $scope.search.order, $scope.search.dateAfter).success(function(response) {
 			instagramSuccess($rootScope, response);
 			
-			document.title = "#" + $scope.search + " | TAGORI.LA";
+			document.title = "#" + $scope.search.term + " | TAGORI.LA";
 			
 
 			});
 	  		
    	}
    	//default view
-   	  if    ($scope.view === "search" && $scope.search.length < 1) {
+   	  if    ($scope.view === "search" && $scope.search.term.length < 1) {
 	  		$scope.items=null;
 	  		$scope.error = null;
 			document.title = "TAGORI.LA | Instagram viewer";
@@ -201,30 +243,23 @@ $scope.$watch('$routeChangeStart', function(){
 	  	}
 
 	//user page
-	  if    ($scope.view === "user" && $scope.search.length > 1) {
-	  		Instagram3.get(24,  $scope.search).success(function(response) {
+	  if    ($scope.view === "user" && $scope.search.term.length > 1) {
+	  		Instagram3.get($scope.search.results,  $scope.search.term).success(function(response) {
 			instagramSuccess($rootScope, response);
 			$scope.gotoElement('hashtext');
 
 			document.title = $scope.items[0].user.username+"'s feed' | TAGORI.LA";
-			
-
-			});
-			tagorila_user.get($scope.search).success(function(response) {
-			instagramUser($rootScope, response);
-
-			//console.log($scope.user_item);
-			
 			});
    	} 
    	// default (/user)
-   	  if    ($scope.view === "user" && $scope.search.length < 1) {
+   	  if    ($scope.view === "user" && $scope.search.term.length < 1) {
 	  		$scope.items=null;
 	  		$scope.error = null;
 			document.title = "TAGORI.LA | Instagram viewer";
    	} else {
    		   document.title = "TAGORI.LA | Instagram viewer";
    	}
+
  });
 
 
@@ -255,6 +290,9 @@ $scope.$watch('$routeChangeStart', function(){
   	  	 	
 
 // load more //
+ $scope.gotoVid = function(){
+ anchorSmoothScroll.scrollTo($scope.youtube['playerId']);
+}
 
 		$scope.loading = false;
 		$scope.itemsDisplayedInList = 24;
@@ -263,15 +301,15 @@ $scope.$watch('$routeChangeStart', function(){
 	  	 if (!$scope.loading) {
 				$scope.noMore = false;
 				$scope.loading = true;
-				Instagram2.get(24, $scope.pagination)
+				Instagram.get($scope.search.results, $scope.search.term, $scope.search.order, $scope.search.dateAfter, $scope.pagination)
 				.success(function(response) {
-			if (response.meta.code !== 200) {
-				$scope.error = response.meta.error_type + ' | ' + response.meta.error_message;
+			if (response.error) {
+				$scope.error = response.error.code + ' | ' + response.error.message;
 				return;
 			}
-			if (response.data.length > 0) {
-				$scope.pagination = response.pagination.next_url;
-				$scope.items = response.data.concat($scope.items);
+			if (response.items.length > 0) {
+				$scope.pagination = response.nextPageToken;
+				$scope.items = response.items.concat($scope.items);
 								$scope.loading = false;
 
 				if($scope.itemsDisplayedInList <= $scope.items.length){
@@ -280,7 +318,7 @@ $scope.$watch('$routeChangeStart', function(){
 
       }
 
-			if (response.data.length < 1) {
+			if (response.items.length < 1) {
 
 				$scope.error = "no more results";
 			}
@@ -298,12 +336,32 @@ $scope.$watch('$routeChangeStart', function(){
 	       
   	  };
 
+//launch video function
+ 	$scope.launch = function (id, title) {
+    	VideosService.launchPlayer(id, title);
+    };
+ 	$scope.stopVideo = function () {
+   		VideosService.stop();
+
+    };
+ 	$scope.playVideo = function () {
+		VideosService.play();
+
+    };
+
+     $scope.pauseVideo = function () {
+    VideosService.pause();
+    };
+
+     $scope.expandVid = function (eID){
+     	VideosService.expandVid(eID);
+	}
 
  // scrollto element //
 
  $scope.gotoElement = function (eID){
       anchorSmoothScroll.scrollTo(eID);
-      
+
     };
 
 	
@@ -311,8 +369,8 @@ $scope.$watch('$routeChangeStart', function(){
 // get the stuff // 
 
 		var instagramSuccess = function(scope, res) {
-
-			if (res.meta.code !== 200) {
+				console.log(res);
+			if (res.error) {
 				scope.error;
 				
 				$scope.$watch('scope.error', function(ev) { 
@@ -320,7 +378,7 @@ $scope.$watch('$routeChangeStart', function(){
       			$mdDialog.alert()
         
 			        .title('Error')
-			        .content(res.meta.error_type + ' | ' + res.meta.error_message)
+			        .content(res.error.code + ' | ' + res.error.message)
 			        .ariaLabel('Error')
 			        .ok('Ok')
 			        .targetEvent(ev)
@@ -332,13 +390,14 @@ $scope.$watch('$routeChangeStart', function(){
 							
 			}
 
-			if (res.data.length > 0) {
+			if (res.items.length > 0) {
 				scope.error = '';
-				scope.items = res.data;
-					if (res.pagination) {
+				scope.items = res.items;
+
+				if (res.nextPageToken) {
 				scope.error = '';
-				scope.items = res.data;
-				scope.pagination = res.pagination.next_url;
+				scope.items = res.items;
+				scope.pagination = res.nextPageToken;
 			
 				
 				}
@@ -399,53 +458,6 @@ $scope.$watch('$routeChangeStart', function(){
 		        
 		        .title('Error')
 		        .content("This media has returned no results")
-		        .ariaLabel('Error')
-		        .ok('Ok')
-		        .targetEvent(ev)
-		        );
-		      
-		 });
-			}
-		};
-
-			var instagramUser = function(scope, res) {
-
-			if (res.meta.code !== 200) {
-				scope.error;
-				
-				$scope.$watch('scope.error', function(ev) { 
- 				$mdDialog.show(
-      			$mdDialog.alert()
-        
-			        .title('Error')
-			        .content(res.meta.error_type + ' | ' + res.meta.error_message)
-			        .ariaLabel('Error')
-			        .ok('Ok')
-			        .targetEvent(ev)
-			        );
-	      
-				 });
-			scope.error='';
-			return;
-							
-			}
-
-			if (res.data ) {
-				scope.error = '';
-				scope.user_item = res.data;
-				
-				}
-			  
-				
-		 else {
-				scope.error;
-				
-				$scope.$watch('scope.error', function(ev) { 
-		 		$mdDialog.show(
-		      	$mdDialog.alert()
-		        
-		        .title('Error')
-		        .content("This user id has returned no results")
 		        .ariaLabel('Error')
 		        .ok('Ok')
 		        .targetEvent(ev)

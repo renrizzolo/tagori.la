@@ -202,6 +202,39 @@ th {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.glyphicon-step-backward:before {
+  content: "\e069";
+}
+.glyphicon-fast-backward:before {
+  content: "\e070";
+}
+.glyphicon-backward:before {
+  content: "\e071";
+}
+.glyphicon-play:before {
+  content: "\e072";
+}
+.glyphicon-pause:before {
+  content: "\e073";
+}
+.glyphicon-stop:before {
+  content: "\e074";
+}
+.glyphicon-forward:before {
+  content: "\e075";
+}
+.glyphicon-fast-forward:before {
+  content: "\e076";
+}
+.glyphicon-step-forward:before {
+  content: "\e077";
+}
+.glyphicon-user:before {
+  content: "\e008";
+}
+.glyphicon-sort-by-attributes-alt:before {
+  content: "\e156";
+}
 
 .glyphicon-plus:before {
   content: "\2b";
@@ -1084,6 +1117,24 @@ a:hover{
     background-color: rgb(217, 83, 79);
     border-color: rgb(212, 63, 58);
 }
+
+
+.title-overlay{
+     padding: 5px;
+    background: rgba(12,12,12,.32);
+    position: absolute;
+    bottom: 10px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.3;
+    white-space: nowrap;
+    width: calc(100% - 20px);
+    overflow: hidden;
+}
+
+.instapic:hover .title-overlay{
+  white-space: normal;
+}
 .container-mast{
 	margin: 0 auto;
 	font-size: 1.5rem;
@@ -1182,6 +1233,11 @@ height:auto;
 }
 
 
+
+.expand-vid{
+    width: calc(50% - 20px);
+    margin: 10px;
+  }
 .vid{
 	min-height:628px;
 }

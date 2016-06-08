@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       },
       build: {
         src: ['src/js/app-copy.js', 'src/js/instagram/controller.js' ],
-        dest: 'dist/js/app.min.js'
+        dest: 'app/dist/js/app.min.js'
       }
     },
     jshint: {
@@ -23,20 +23,29 @@ module.exports = function(grunt) {
       },
       build: {
         files: {
-          'css/style.min.css': ['css/style.css','css/ngDialog.min.css','css/ngDialog-theme-plain.css']
+          'app/css/style.min.css': ['css/style.css','css/ngDialog.min.css','css/ngDialog-theme-plain.css']
         }
       }
     },
    
-
+  watch: {
+      css: {
+        files: 'css/**.css',
+        tasks: ['cssmin']
+      },
+       scripts: {
+        files: 'src/**.js',
+        tasks: ['uglify']
+      }
+    },
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
 
   // Default task(s).
