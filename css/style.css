@@ -1123,12 +1123,12 @@ a:hover{
      padding: 5px;
     background: rgba(12,12,12,.32);
     position: absolute;
-    bottom: 10px;
+    bottom: 0px;
     color: #fff;
     font-size: 14px;
     line-height: 1.3;
     white-space: nowrap;
-    width: calc(100% - 20px);
+    width: 100%;
     overflow: hidden;
 }
 
@@ -1701,4 +1701,7 @@ padding-left: 45px;
 padding-right: 45px;
 
   }
+}
+.md-dialog-container{
+  position: fixed!important;
 }

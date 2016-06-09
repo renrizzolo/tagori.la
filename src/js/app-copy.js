@@ -116,8 +116,9 @@ app.service('VideosService', ['$window', '$rootScope', '$log', function ($window
 
   function onYoutubeReady (event) {
     $log.info('YouTube Player is ready');
+     //   service.expandVid(youtube.videoId);
+
     youtube.player.loadVideoById(youtube.videoId);
-    service.expandVid(youtube.playerId);
    // youtube.videoId = $rootScope.video.id;
 
   }
@@ -203,33 +204,34 @@ app.service('VideosService', ['$window', '$rootScope', '$log', function ($window
         youtube.player.pauseVideo();
     }
 
-    this.expandVid = function(eID){
-        var vid = document.getElementById(eID).parentNode.parentNode;
-        var oldSize = vid.getBoundingClientRect();
-        var oldHeight = oldSize.height;
-        var oldWidth = oldSize.width;
+    this.expandVid = function(vId){
+   //      var vid = document.getElementById(eID).parentNode.parentNode;
+   //      var oldSize = vid.getBoundingClientRect();
+   //      var oldHeight = oldSize.height;
+   //      var oldWidth = oldSize.width;
 
-        var newWidth = (oldWidth * 2);
+   //      var newWidth = (oldWidth * 2);
 
-        var oldVid = document.getElementsByClassName('expand');
-         console.log(oldVid);
-                 //dont enlarge related videos coz it's broken
-   var i;
-        for (i = 0; i < oldVid.length; i++) {
-            oldVid[i].style.width = "16.66666667%";
-            oldVid[i].style.margin = "0";
-        }  
+   //      var oldVid = document.getElementsByClassName('expand');
+   //       console.log(oldVid);
+   //               //dont enlarge related videos coz it's broken
+   // var i;
+   //      for (i = 0; i < oldVid.length; i++) {
+   //          oldVid[i].style.width = "16.66666667%";
+   //          oldVid[i].style.margin = "0";
+   //      }  
 
      
-        vid.className += " expand";
-        console.log(newWidth);
-        vid.style.width = 'calc('+newWidth+'px - 20px)';
-        vid.style.margin = "10px";
+   //      vid.className += " expand";
+   //      console.log(newWidth);
+   //      vid.style.width = 'calc('+newWidth+'px - 20px)';
+   //      vid.style.margin = "10px";
 
 
-        $rootScope.$broadcast('masonry.layout');
+   //      $rootScope.$broadcast('masonry.layout');
 
-    }
+
+};
 
     this.launchPlayer = function (id, title) {
         youtube.videoId = id;
@@ -401,4 +403,5 @@ app.factory('instaMedia', ['$http',
         };
     }
 ]);
+
 'use strict';

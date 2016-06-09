@@ -2,9 +2,9 @@
 
 
 app.controller('SearchCtrl', 
-	['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog', 'VideosService', 'youtubeRelated',
+	['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog', 'VideosService', 'youtubeRelated', '$mdMedia',
 
-	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog, VideosService,youtubeRelated) {
+	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog, VideosService,youtubeRelated, $mdMedia) {
 	  $rootScope.what = [];
 	  $rootScope.video = [];
 	  $rootScope.video.id = []
@@ -144,11 +144,77 @@ $scope.dateParse = function(difference){
 // $scope.search.day = dayISO;
 // use search query in url for instagram.get //
 
+
+  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+
+$scope.launchPanel = function(vId){
+}
+
+
+
+		$scope.youtubeRelated = function(more){
+
+				$scope.related.items = [];
+				$scope.related.noMore = false;
+				$scope.related.itemsDisplayedInList = 6;
+				console.log($scope.youtube);
+			youtubeRelated.get(6,  $scope.youtube.videoId, $scope.related.pagination)
+
+			.success(function(response) {
+				var dialog = document.getElementsByClassName('md-dialog-container');
+				console.log(dialog);
+				if (dialog.length > 0){
+				dialog[0].style.marginTop = "-100px";
+			}
+			if (response.error) {
+				$scope.related.error = response.error.code + ' | ' + response.error.message;
+				return;
+			}
+			if (response.items.length > 0) {
+				$scope.related.pagination = response.nextPageToken;
+				$scope.related.prev = response.nextPageToken;
+				$scope.related.items = response.items;
+				$scope.related.loading = false;
+
+				if($scope.related.itemsDisplayedInList <= $scope.related.items.length){
+         		$scope.related.itemsDisplayedInList = $scope.related.itemsDisplayedInList + 6;
+         		$scope.loading = false;
+
+      		}
+
+			if (response.items.length < 1) {
+
+				$scope.related.error = "no more results";
+			}
+			} else {
+				$scope.related.error = "no results";
+				
+			}
+				}).
+			error(function(response) {
+				
+				$scope.related.noMore = true;
+			});
+			// } else if (more == "less") {
+
+			// }else {
+			// $scope.related.items = [];
+			// youtubeRelated.get(6,  $scope.youtube.videoId, $scope.related.pagination)
+  	// 		.success(function(response) {
+			// 	instagramSuccess($scope.related, response);
+			// 	console.log($scope.related);
+			
+			
+			
+		
+		};
+
 $scope.$watch('$routeChangeStart', function(){
 		  var tag = document.createElement('script');
   tag.src = "https://www.youtube.com/iframe_api";
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
 			var pathParts = $location.path().split('/');
  	        $scope.search.term = pathParts[2];
  	        $scope.view = pathParts[1];
@@ -208,74 +274,22 @@ $scope.$watch('$routeChangeStart', function(){
 	// 	 }
 
 
-		$scope.youtubeRelated = function(more){
-
-				$scope.related.items = [];
-				$scope.related.noMore = false;
-				$scope.related.itemsDisplayedInList = 6;
-				console.log($scope.youtube);
-			youtubeRelated.get(6,  $scope.youtube.videoId, $scope.related.pagination)
-
-			.success(function(response) {
-			if (response.error) {
-				$scope.related.error = response.error.code + ' | ' + response.error.message;
-				return;
-			}
-			if (response.items.length > 0) {
-				$scope.related.pagination = response.nextPageToken;
-				$scope.related.prev = response.nextPageToken;
-				$scope.related.items = response.items;
-				$scope.related.loading = false;
-
-				if($scope.related.itemsDisplayedInList <= $scope.related.items.length){
-         		$scope.related.itemsDisplayedInList = $scope.related.itemsDisplayedInList + 6;
-         		$scope.loading = false;
-
-      		}
-
-			if (response.items.length < 1) {
-
-				$scope.related.error = "no more results";
-			}
-			} else {
-				$scope.related.error = "no results";
-				
-			}
-				}).
-			error(function(response) {
-				
-				$scope.related.noMore = true;
-			});
-			// } else if (more == "less") {
-
-			// }else {
-			// $scope.related.items = [];
-			// youtubeRelated.get(6,  $scope.youtube.videoId, $scope.related.pagination)
-  	// 		.success(function(response) {
-			// 	instagramSuccess($scope.related, response);
-			// 	console.log($scope.related);
-			
-			
-			
-		
-		};
-
   switch($scope.search.dateAfter){
-        case 'any': $scope.search.dateAfter = '1970-05-31T03:51:07.968Z';
+        case 'any': $scope.search.dateAfterISO = '1970-05-31T03:51:07.968Z';
         break;
-        case 'day': $scope.search.dateAfter = $scope.dateParse(1);
+        case 'day': $scope.search.dateAfterISO = $scope.dateParse(1);
         break;
-        case 'week': $scope.search.dateAfter = $scope.dateParse(7);
+        case 'week': $scope.search.dateAfterISO = $scope.dateParse(7);
         break;
-        case 'month': $scope.search.dateAfter = $scope.dateParse(30);
+        case 'month': $scope.search.dateAfterISO = $scope.dateParse(30);
         break;
-        case 'threemonths': $scope.search.dateAfter = $scope.dateParse(90);
+        case 'threemonths': $scope.search.dateAfterISO = $scope.dateParse(90);
         break;
-        case 'year': $scope.search.dateAfter = $scope.dateParse(365);
+        case 'year': $scope.search.dateAfterISO = $scope.dateParse(365);
      }
 	//search
 	  if    ($scope.view === "search" && $scope.search.term.length > 1) {
-	  		Instagram.get($scope.search.results,  $scope.search.term, $scope.search.order, $scope.search.dateAfter).success(function(response) {
+	  		Instagram.get($scope.search.results,  $scope.search.term, $scope.search.order, $scope.search.dateAfterISO).success(function(response) {
 			instagramSuccess($rootScope, response);
 			
 			document.title = "#" + $scope.search.term + " | TAGORI.LA";
@@ -351,7 +365,7 @@ $scope.$watch('$routeChangeStart', function(){
 	  	 if (!$scope.loading) {
 				$scope.noMore = false;
 				$scope.loading = true;
-				Instagram.get($scope.search.results, $scope.search.term, $scope.search.order, $scope.search.dateAfter, $scope.pagination)
+				Instagram.get($scope.search.results, $scope.search.term, $scope.search.order, $scope.search.dateAfterISO, $scope.pagination)
 				.success(function(response) {
 			if (response.error) {
 				$scope.error = response.error.code + ' | ' + response.error.message;
@@ -387,17 +401,48 @@ $scope.$watch('$routeChangeStart', function(){
   	  };
 
 //launch video function
- 	$scope.launch = function (id, title) {
-    	VideosService.launchPlayer(id, title);
-    	var vid = $scope.youtube.videoId;
-    	var vidItem = 'item-'+vid;
-      //  appendBricks(vid);
+ 	$scope.launch = function ($event, id, title) {
+ 		
+ 		    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+   // var elementWrapper = {};
+    //elementWrapper.target = angular.element(document.getElementById('player-'+id));
+    $mdDialog.show({
+    	  controller: function () { this.parent = $scope; },
+
+      template: 
+            '<md-dialog-content>'+
+                '<div layout="row" style="width:800px;height:450px;">'+
+                    '<div id="player-'+id+'" style="z-index: 999;"></div>'+
+               '</div>'+
+       '</md-dialog-content>'       ,
+      	targetEvent: $event,
+     // parent: angular.element(document.querySelector('#content')),
+     	parent: angular.element(document.body),
+      	disableParentScroll: false,
+      	clickOutsideToClose:true,
+      	fullscreen: useFullScreen,
+      	onComplete: function(){
+      	VideosService.launchPlayer(id, title);
+    //	var vid = $scope.youtube.videoId;
+    //	var vidItem = 'item-'+vid;
+      	}
+    });
+ 
+    $scope.$watch(function() {
+      return $mdMedia('xs') || $mdMedia('sm');
+    }, function(wantsFullScreen) {
+      $scope.customFullscreen = (wantsFullScreen === true);
+    });
+   
+//  appendBricks(vid);
 
             //    $rootScope.$broadcast('masonry.append');
 
        // vid.destroy();
         
     };
+
+      
     	$scope.launchRelated = function (id, title) {
     	VideosService.launchRelated(id, title);
     };
