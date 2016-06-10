@@ -2,9 +2,9 @@
 
 
 app.controller('SearchCtrl', 
-	['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog', 'VideosService', 'youtubeRelated', '$mdMedia',
+	['$scope', '$rootScope', '$route', '$routeParams', '$location', '$anchorScroll', 'Instagram', 'Instagram2', 'Instagram3', 'instaMedia', 'instaLink', 'ngDialog', 'anchorSmoothScroll', '$window', '$mdDialog', 'VideosService', 'youtubeRelated', '$mdMedia','$mdBottomSheet',
 
-	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog, VideosService,youtubeRelated, $mdMedia) {
+	function($scope, $rootScope, $route, $routeParams, $location, $anchorScroll, Instagram, Instagram2, Instagram3, instaMedia, instaLink, ngDialog, anchorSmoothScroll, $window, $mdDialog, VideosService,youtubeRelated, $mdMedia, $mdBottomSheet) {
 	  $rootScope.what = [];
 	  $rootScope.video = [];
 	  $rootScope.video.id = []
@@ -151,21 +151,60 @@ $scope.launchPanel = function(vId){
 }
 
 
-
+		$scope.clearRelated = function(){
+			$scope.related.items = [];
+		}
 		$scope.youtubeRelated = function(more){
-
-				$scope.related.items = [];
 				$scope.related.noMore = false;
 				$scope.related.itemsDisplayedInList = 6;
 				console.log($scope.youtube);
+				$mdBottomSheet.show({
+      			template:  
+ '     <md-bottom-sheet class="pos-f-b" layout="column" ng-cloak>'+
+'<div layout-wrap  layout-align="center" style="max-width:1920px;" layout="row" show="related.items">'+
+        
+               ' <div flex id="item-{{item.id.videoId}}" style="position: relative;" class="animate instapic related" ng-repeat="item in filteredItems2 = (related.items.slice().reverse())">'+
+                                       '<a class="tile" ng-click="launch($event, item.id.videoId, item.snippet.title);">'+
+
+                             ' <img  preload-image ng-src="{{ item.snippet.thumbnails.high.url }}" default-image="img/loading-bubbles.svg" fallback-image="{{ item.snippet.thumbnails.default.url }}"  title="" alt="">'+
+                          
+                        '</a>'+
+                       
+               
+                    '<div class="title-overlay">'+
+                      '<h4 style="margin:0;">{{item.snippet.title}}</h4>'+
+                       
+                       '<small>{{item.snippet.date | date:"shortTime"}}</small>'+
+                    '</div>'+
+                     
+                '</div>'+
+
+                    '<div ng-show="error" class="error">'+
+
+                    '</div>' +
+                   '<md-button ng-show="related.items" ng-hide="related.noMore" class="md-mini" aria-label="next related" ng-click="youtubeRelated(more);">'  + 
+                   ' <md-icon class="glyphicon glyphicon-forward"></md-icon>'+
+                  '</md-button>'+
+                    '<h3 ng-show="related.noMore">No more results</h3>'+
+           ' </div>'+
+           '</md-bottom-sheet>',
+           	hasBackdrop: false,
+           	disableParentScroll: false,
+      		clickOutsideToClose: false,
+      		preserveScope: true,
+			scope: $scope
+			});
 			youtubeRelated.get(6,  $scope.youtube.videoId, $scope.related.pagination)
 
 			.success(function(response) {
-				var dialog = document.getElementsByClassName('md-dialog-container');
-				console.log(dialog);
-				if (dialog.length > 0){
-				dialog[0].style.marginTop = "-100px";
-			}
+			// 	var dialog = document.getElementsByClassName('md-dialog-container');
+			// 	console.log(dialog);
+			// 	if (dialog.length > 0){
+			// 	dialog[0].style.marginTop = "-100px";
+			// }
+			
+   
+
 			if (response.error) {
 				$scope.related.error = response.error.code + ' | ' + response.error.message;
 				return;
@@ -401,49 +440,60 @@ $scope.$watch('$routeChangeStart', function(){
   	  };
 
 //launch video function
- 	$scope.launch = function ($event, id, title) {
- 		
- 		    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-   // var elementWrapper = {};
-    //elementWrapper.target = angular.element(document.getElementById('player-'+id));
-    $mdDialog.show({
-    	  controller: function () { this.parent = $scope; },
+ 	$scope.launch = function($event, id, title) {
 
-      template: 
-            '<md-dialog-content>'+
-                '<div layout="row" style="width:800px;height:450px;">'+
-                    '<div id="player-'+id+'" style="z-index: 999;"></div>'+
-               '</div>'+
-       '</md-dialog-content>'       ,
-      	targetEvent: $event,
-     // parent: angular.element(document.querySelector('#content')),
-     	parent: angular.element(document.body),
-      	disableParentScroll: false,
-      	clickOutsideToClose:true,
-      	fullscreen: useFullScreen,
-      	onComplete: function(){
-      	VideosService.launchPlayer(id, title);
-    //	var vid = $scope.youtube.videoId;
-    //	var vidItem = 'item-'+vid;
-      	}
-    });
- 
-    $scope.$watch(function() {
-      return $mdMedia('xs') || $mdMedia('sm');
-    }, function(wantsFullScreen) {
-      $scope.customFullscreen = (wantsFullScreen === true);
-    });
-   
-//  appendBricks(vid);
+	 	var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+	   // var elementWrapper = {};
+	    //elementWrapper.target = angular.element(document.getElementById('player-'+id));
+	    $mdDialog.show({
+           // locals:{dataToPass: $scope.parentScopeData},
+             locals: {
+        
+        },
+	      	template: 
+	        '<md-dialog-content>'+
+	                '<div layout="row" class="iframe-container">'+
+	                    '<div id="player-'+id+'" style="z-index: 999;"></div>'+
+	               '</div>'+
+	       	'</md-dialog-content>'+
+	       	'  <md-dialog-actions>' +
+	           '    <md-button ng-click="closeDialog()" class="md-primary">' +
+	           '     <md-icon class="glyphicon glyphicon-remove"></md-icon>' +
+	           '    </md-button>' +
+	           '  </md-dialog-actions>'       ,
+	      	targetEvent: $event,
+	     	// parent: angular.element(document.querySelector('#content')),
+	     	parent: angular.element(document.body),
+	     	hasBackdrop: false,
+	      	disableParentScroll: false,
+	      	clickOutsideToClose:true,
+	      	fullscreen: useFullScreen,
+	      		scope: $scope,
+	      		preserveScope: true,
+	      	onComplete: function(){
+		      	VideosService.launchPlayer(id, title);
+		    	//	var vid = $scope.youtube.videoId;
+		    	//	var vidItem = 'item-'+vid;
+		      	}
+	    });
 
-            //    $rootScope.$broadcast('masonry.append');
+	   
+	
 
-       // vid.destroy();
+	    $scope.$watch(function() {
+	      return $mdMedia('xs') || $mdMedia('sm');
+	    }, function(wantsFullScreen) {
+	      $scope.customFullscreen = (wantsFullScreen === true);
+	    });
+	   
         
     };
-
-      
-    	$scope.launchRelated = function (id, title) {
+   
+	$scope.closeDialog = function() {
+	        $mdDialog.hide();
+	    }; 
+   	$scope.launchRelated = function (id, title) {
+   		      
     	VideosService.launchRelated(id, title);
     };
  	$scope.stopVideo = function () {
@@ -452,11 +502,10 @@ $scope.$watch('$routeChangeStart', function(){
     };
  	$scope.playVideo = function () {
 		VideosService.play();
-
     };
 
-     $scope.pauseVideo = function () {
-    VideosService.pause();
+    $scope.pauseVideo = function () {
+   		VideosService.pause();
     };
 
 
